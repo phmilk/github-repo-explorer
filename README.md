@@ -3,14 +3,14 @@
 - [] Testes com React Testing Library
 - [x] Formatação/padronização de código com eslint e pretter
 - [x] Requests com Axios
-- [] Layout Responsivo com Bootstrap
-- [] Input de busca de usuário
+- [x] Layout Responsivo com Bootstrap
+- [x] Input de busca de usuário
 - [] Detalhes do usuário
-  - [] número de seguidores
-  - [] número de seguidos
-  - [] imagem do avatar
-  - [] e-mail
-  - [] bio
+  - [x] número de seguidores
+  - [x] número de seguidos
+  - [x] imagem do avatar
+  - [x] e-mail
+  - [x] bio
 - [] Lista de repositorios
   - [] Ordenação padrão: número decrescente de estrelas
   - [] Alterar ordenação

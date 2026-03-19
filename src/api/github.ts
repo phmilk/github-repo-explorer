@@ -9,8 +9,26 @@ const ghClient: AxiosInstance = axios.create({
   timeout: 10000
 })
 
+export interface UserInfo {
+  login: string
+  id: number
+  avatar_url: string
+  html_url: string
+  type: string
+  public_repos: number
+  public_gists: number
+  followers: number
+  following: number
+  name: string | null
+  bio: string | null
+  location: string | null
+  blog: string
+  company: string | null
+  email: string | null
+}
+
 function getUserInfo(username: string) {
-  return ghClient.get(`/users/${username}`)
+  return ghClient.get<UserInfo>(`/users/${username}`)
 }
 
 export { getUserInfo }

@@ -1,12 +1,25 @@
 import { Route, Routes } from 'react-router'
-import './App.css'
+import Layout from './components/Layout'
+import HomePage from './pages/HomePage'
+import UserPage from './pages/UserPage'
+import RepositoryPage from './pages/RepositoryPage'
+import NotFoundPage from './pages/NotFoundPage'
+
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import './App.scss'
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<h1>Home</h1>} />
-      <Route path=":username" element={<h1>User</h1>} />
-      <Route path=":username/:reponame" element={<h1>Repo</h1>} />
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="user/:username" element={<UserPage />} />
+        <Route
+          path="user/:username/repo/:reponame"
+          element={<RepositoryPage />}
+        />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   )
 }
