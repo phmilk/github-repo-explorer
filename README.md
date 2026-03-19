@@ -1,0 +1,24 @@
+- [x] React SPA (client-side) com Vite
+- [x] Rotas com React-router
+- [] Testes com React Testing Library
+- [x] Formatação/padronização de código com eslint e pretter
+- [x] Requests com Axios
+- [] Layout Responsivo com Bootstrap
+- [] Input de busca de usuário
+- [] Detalhes do usuário
+  - [] número de seguidores
+  - [] número de seguidos
+  - [] imagem do avatar
+  - [] e-mail
+  - [] bio
+- [] Lista de repositorios
+  - [] Ordenação padrão: número decrescente de estrelas
+  - [] Alterar ordenação
+- [] Detalhe do repositório
+  - [] Nome
+  - [] Descrição
+  - [] Número de estrelas
+  - [] Linguagem
+  - [] Link externo para a página do repositório no GitHub
+- [] CI/CD com GitHubActions
+- [] Hospedagem no firebase hosting
