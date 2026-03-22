@@ -1,12 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import type { RepoInfo } from '@api/github'
-import { getRepoInfo } from '@api/github'
+import type { Repo } from '@api/github'
+import { getRepo } from '@api/github'
 import RepoPage from '@pages/RepoPage'
 
 vi.mock('@api/github', () => ({
-  getRepoInfo: vi.fn()
+  getRepo: vi.fn()
 }))
 
 vi.mock('@components/Loading', () => ({
@@ -14,12 +14,12 @@ vi.mock('@components/Loading', () => ({
 }))
 
 vi.mock('@components/RepoDetails', () => ({
-  default: ({ repo }: { repo: RepoInfo }) => (
+  default: ({ repo }: { repo: Repo }) => (
     <div data-testid="repo-details">{repo.name}</div>
   )
 }))
 
-const mockRepo: RepoInfo = {
+const mockRepo: Repo = {
   id: 1,
   name: 'test-repo',
   full_name: 'testuser/test-repo',
@@ -68,14 +68,14 @@ describe('RepoPage', () => {
   })
 
   it('shows loading while fetching', () => {
-    vi.mocked(getRepoInfo).mockReturnValue(new Promise(() => {}))
+    vi.mocked(getRepo).mockReturnValue(new Promise(() => {}))
 
     renderWithParams('testuser', 'test-repo')
     expect(screen.getByTestId('loading')).toBeInTheDocument()
   })
 
   it('renders back button with username', () => {
-    vi.mocked(getRepoInfo).mockReturnValue(new Promise(() => {}))
+    vi.mocked(getRepo).mockReturnValue(new Promise(() => {}))
 
     renderWithParams('testuser', 'test-repo')
 
@@ -85,7 +85,7 @@ describe('RepoPage', () => {
   })
 
   it('shows repo details on success', async () => {
-    vi.mocked(getRepoInfo).mockResolvedValue({ data: mockRepo } as never)
+    vi.mocked(getRepo).mockResolvedValue({ data: mockRepo } as never)
 
     renderWithParams('testuser', 'test-repo')
 
@@ -96,7 +96,7 @@ describe('RepoPage', () => {
   })
 
   it('shows error page on fetch failure', async () => {
-    vi.mocked(getRepoInfo).mockRejectedValue(new Error('API error'))
+    vi.mocked(getRepo).mockRejectedValue(new Error('API error'))
 
     renderWithParams('testuser', 'test-repo')
 

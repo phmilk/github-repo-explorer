@@ -1,36 +1,38 @@
-import type { RepoInfo as RepoInfoType } from '@api/github'
-import { RepoDetailsProvider } from '@contexts/RepoDetailsContext'
-import Header from './Header'
-import Stats from './Stats/index'
-import Description from './Description'
-import Footer from './Footer'
-import Language from './Language'
-import CreatedAt from './CreatedAt'
-import UpdatedAt from './UpdatedAt'
-import PushedAt from './PushedAt'
+import Badge from 'react-bootstrap/Badge'
+import Stack from 'react-bootstrap/Stack'
+import type { Repo } from '@api/github'
+import RepoHeader from './RepoHeader'
+import RepoStats from './RepoStats'
+import RepoInfo from './RepoInfo'
 
 interface RepoDetailsProps {
-  repo: RepoInfoType
+  repo: Repo
 }
 
 function RepoDetails({ repo }: RepoDetailsProps) {
   return (
-    <RepoDetailsProvider repo={repo}>
-      <div className="card shadow-sm border-0">
-        <Header />
-        <div className="card-body p-4">
-          <Stats />
-          <Description />
-          <div className="row g-3 mb-4">
-            <Language />
-            <CreatedAt />
-            <UpdatedAt />
-            <PushedAt />
-          </div>
-        </div>
-        <Footer />
-      </div>
-    </RepoDetailsProvider>
+    <div>
+      <RepoHeader repo={repo} />
+
+      <article className="p-3 p-md-4">
+        {repo.description && (
+          <p className="text-muted mb-3">{repo.description}</p>
+        )}
+
+        {repo.topics.length > 0 && (
+          <Stack direction="horizontal" gap={1} className="flex-wrap mb-3">
+            {repo.topics.map((topic) => (
+              <Badge key={topic} bg="primary" className="fw-normal">
+                {topic}
+              </Badge>
+            ))}
+          </Stack>
+        )}
+
+        <RepoStats repo={repo} />
+        <RepoInfo repo={repo} />
+      </article>
+    </div>
   )
 }
 

@@ -1,8 +1,8 @@
 import { createContext } from 'react'
-import type { RepoInfo } from '@api/github'
+import type { Repo } from '@api/github'
 
 interface ListItemContextValue {
-  repo: RepoInfo
+  repo: Repo
   username: string
 }
 
@@ -16,7 +16,7 @@ function ListItemProvider({
   username
 }: {
   children: React.ReactNode
-  repo: RepoInfo
+  repo: Repo
   username: string
 }) {
   return (

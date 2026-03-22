@@ -21,8 +21,10 @@ function RepoPagination({
 
   if (totalPages <= 1) return null
 
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
+
   return (
-    <Pagination className="m-0">
+    <Pagination className="mb-0">
       <Pagination.First
         onClick={() => handlePageChange(1)}
         disabled={currentPage === 1 || loading}
@@ -32,15 +34,15 @@ function RepoPagination({
         disabled={currentPage === 1 || loading}
       />
 
-      {Array.from({ length: totalPages }, (_, i) => {
-        const pageNum = i + 1
+      {pages.map((pageNum, i) => {
         const isNear =
           Math.abs(pageNum - currentPage) <= 2 ||
           pageNum === 1 ||
           pageNum === totalPages
 
         if (!isNear && i > 0 && i < totalPages - 1) {
-          if (i === 1) return <Pagination.Ellipsis key="ellipsis-start" disabled />
+          if (i === 1)
+            return <Pagination.Ellipsis key="ellipsis-start" disabled />
           if (i === totalPages - 2)
             return <Pagination.Ellipsis key="ellipsis-end" disabled />
           return null

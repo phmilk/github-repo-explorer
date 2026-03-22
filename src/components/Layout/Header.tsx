@@ -1,24 +1,27 @@
+import Navbar from 'react-bootstrap/Navbar'
 import { Link } from 'react-router'
 import Search from '../Search'
 import UserMenu from './UserMenu'
 
 function Header() {
   return (
-    <header className="navbar navbar-expand-lg navbar-dark bg-dark p-3">
-      <div className="container-fluid">
-        <Link to="/" className="navbar-brand d-flex align-items-center">
-          <i className="bi bi-github me-2" style={{ fontSize: '24px' }}></i>
-          <span className="h5 mb-0">GitHub Repo Explorer</span>
-        </Link>
-        <div
-          className="d-flex w-100 mt-2 mt-lg-0 gap-3 align-items-center"
-          style={{ maxWidth: '400px' }}
-        >
-          <Search />
-          <UserMenu />
-        </div>
+    <Navbar
+      as="header"
+      bg="dark"
+      data-bs-theme="dark"
+      expand="md"
+      sticky="top"
+      className="flex-nowrap gap-2 p-2"
+    >
+      <Navbar.Brand as={Link} to="/">
+        <i className="bi bi-github me-2" aria-hidden="true" />
+        <span className="d-none d-md-inline">GitHub Repo Explorer</span>
+      </Navbar.Brand>
+      <div className="d-flex align-items-center gap-2 ms-auto">
+        <Search />
+        <UserMenu />
       </div>
-    </header>
+    </Navbar>
   )
 }
 

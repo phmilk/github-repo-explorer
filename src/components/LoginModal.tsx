@@ -1,16 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { signInWithPopup, GithubAuthProvider } from 'firebase/auth'
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
 import { auth, githubProvider } from '@lib/firebase'
 import { setToken } from '@api/auth'
 import { useLoginModal } from '@hooks/useLoginModal'
+import Button from 'react-bootstrap/Button'
 import type { AxiosError } from 'axios'
 
 function LoginModal() {
   const { isOpen, closeModal } = useLoginModal()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+    if (isOpen) dialog.showModal()
+    else dialog.close()
+  }, [isOpen])
 
   async function handleLogin() {
     setLoading(true)
@@ -36,36 +43,61 @@ function LoginModal() {
   }
 
   return (
-    <Modal show={isOpen} onHide={closeModal} centered>
-      <Modal.Body className="p-4 text-center">
-        <i className="bi bi-github" style={{ fontSize: '56px' }}></i>
-        <h5 className="mt-3 mb-1">GitHub Repo Explorer</h5>
-        <p className="text-muted small mb-4">
-          Entre com sua conta do GitHub para continuar
-        </p>
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="login-title"
+      onClose={closeModal}
+      style={{ border: 'none', borderRadius: '0.75rem', padding: 0, width: '100%', maxWidth: '360px' }}
+    >
+      <div className="p-4">
+        <div className="d-flex justify-content-between align-items-start mb-4">
+          <div>
+            <h2 id="login-title" className="h5 mb-1">
+              <i className="bi bi-github me-2" aria-hidden="true" />
+              GitHub Repo Explorer
+            </h2>
+            <p className="text-muted small mb-0">
+              Entre com sua conta do GitHub para continuar
+            </p>
+          </div>
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Fechar"
+            onClick={closeModal}
+          />
+        </div>
 
-        {error && <div className="alert alert-danger py-2 small">{error}</div>}
+        {error && (
+          <p role="alert" className="text-danger small mb-3">
+            <i className="bi bi-exclamation-circle me-1" aria-hidden="true" />
+            {error}
+          </p>
+        )}
 
         <Button
           variant="dark"
-          className="w-100 d-flex align-items-center justify-content-center gap-2"
+          className="w-100"
           onClick={handleLogin}
           disabled={loading}
         >
           {loading ? (
             <>
-              <span className="spinner-border spinner-border-sm" />
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              />
               Aguardando autorização...
             </>
           ) : (
             <>
-              <i className="bi bi-github"></i>
+              <i className="bi bi-github me-2" aria-hidden="true" />
               Entrar com GitHub
             </>
           )}
         </Button>
-      </Modal.Body>
-    </Modal>
+      </div>
+    </dialog>
   )
 }
 

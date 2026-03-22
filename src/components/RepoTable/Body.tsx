@@ -1,8 +1,8 @@
-import type { RepoInfo } from '@api/github'
+import type { Repo } from '@api/github'
 import Row from './Row'
 
 interface BodyProps {
-  repos: RepoInfo[]
+  repos: Repo[]
 }
 
 function Body({ repos }: BodyProps) {
@@ -10,11 +10,7 @@ function Body({ repos }: BodyProps) {
     return (
       <tbody>
         <tr>
-          <td colSpan={7}>
-            <div className="d-flex align-items-center justify-content-center p-5 text-muted">
-              Nenhum repositório encontrado.
-            </div>
-          </td>
+          <td colSpan={4}>Nenhum repositório encontrado.</td>
         </tr>
       </tbody>
     )

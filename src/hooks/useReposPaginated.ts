@@ -1,27 +1,22 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import {
-  getUserInfo,
-  getUserReposPage,
-  isRateLimitError,
-  type UserInfo,
-  type RepoInfo,
-  type SortOption,
+  getUser,
+  getUserRepos,
+  getRateLimitMessage,
+  type User,
+  type Repo,
   type SortDirection
 } from '@api/github'
+import type { SortColumn } from '@components/RepoTable'
 
-const VALID_SORTS: SortOption[] = ['created', 'updated', 'pushed', 'full_name']
 const VALID_PER_PAGES = [10, 20, 30, 50, 100]
-
-function parseSort(value: string | null): SortOption {
-  return VALID_SORTS.includes(value as SortOption)
-    ? (value as SortOption)
-    : 'full_name'
-}
-
-function parseDirection(value: string | null): SortDirection {
-  return value === 'asc' ? 'asc' : 'desc'
-}
+const VALID_SORT_COLUMNS: SortColumn[] = [
+  'stargazers_count',
+  'forks_count',
+  'open_issues_count',
+  'full_name'
+]
 
 function parsePerPage(value: string | null): number {
   const n = parseInt(value ?? '30', 10)
@@ -33,21 +28,31 @@ function parsePage(value: string | null): number {
   return n > 0 ? n : 1
 }
 
+function parseSortColumn(value: string | null): SortColumn {
+  return VALID_SORT_COLUMNS.includes(value as SortColumn)
+    ? (value as SortColumn)
+    : 'stargazers_count'
+}
+
+function parseSortDirection(value: string | null): SortDirection {
+  return value === 'asc' ? 'asc' : 'desc'
+}
+
 interface UseReposPaginatedReturn {
-  userInfo: UserInfo | null | undefined
-  repos: RepoInfo[]
+  user: User | null | undefined
+  repos: Repo[]
   currentPage: number
   perPage: number
-  sortOption: SortOption
-  sortDirection: SortDirection
+  sort: SortColumn
+  direction: SortDirection
   totalRepos: number
   totalPages: number
   loading: boolean
   error: boolean
-  rateLimited: boolean
+  rateLimitMessage: string | null
   setCurrentPage: (page: number) => void
   setPerPage: (perPage: number) => void
-  setSort: (option: SortOption, direction: SortDirection) => void
+  setSort: (column: SortColumn, direction: SortDirection) => void
 }
 
 function useReposPaginated(
@@ -57,26 +62,31 @@ function useReposPaginated(
 
   const currentPage = parsePage(searchParams.get('page'))
   const perPage = parsePerPage(searchParams.get('per_page'))
-  const sortOption = parseSort(searchParams.get('sort'))
-  const sortDirection = parseDirection(searchParams.get('direction'))
+  const sort = parseSortColumn(searchParams.get('sort'))
+  const direction = parseSortDirection(searchParams.get('direction'))
 
-  const [userInfo, setUserInfo] = useState<UserInfo | null>()
-  const [repos, setRepos] = useState<RepoInfo[]>([])
+  // Only pass sort/direction to the API for full_name (API-side sort)
+  const apiSort = sort === 'full_name' ? sort : undefined
+  const apiDirection = sort === 'full_name' ? direction : undefined
+
+  const [user, setUser] = useState<User | null>()
+  const [repos, setRepos] = useState<Repo[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [rateLimited, setRateLimited] = useState(false)
+  const [rateLimitMessage, setRateLimitMessage] = useState<string | null>(null)
 
   useEffect(() => {
     if (!username) return
     ;(async () => {
       try {
-        const userResponse = await getUserInfo(username)
-        setUserInfo(userResponse.data)
+        const response = await getUser(username)
+        setUser(response.data)
         setError(false)
       } catch (err) {
         console.error(err)
-        setUserInfo(null)
-        if (isRateLimitError(err)) setRateLimited(true)
+        setUser(null)
+        const msg = getRateLimitMessage(err)
+        if (msg) setRateLimitMessage(msg)
         else setError(true)
       }
     })()
@@ -86,26 +96,27 @@ function useReposPaginated(
     if (!username) return
     ;(async () => {
       setLoading(true)
-      setRateLimited(false)
+      setRateLimitMessage(null)
       try {
-        const reposResponse = await getUserReposPage(
+        const reposResponse = await getUserRepos(
           username,
           currentPage,
-          sortOption,
-          sortDirection,
-          perPage
+          perPage,
+          apiSort,
+          apiDirection
         )
         setRepos(reposResponse.data)
         setError(false)
       } catch (err) {
         console.error(err)
         setRepos([])
-        if (isRateLimitError(err)) setRateLimited(true)
+        const msg = getRateLimitMessage(err)
+        if (msg) setRateLimitMessage(msg)
         else setError(true)
       }
       setLoading(false)
     })()
-  }, [username, currentPage, sortOption, sortDirection, perPage])
+  }, [username, currentPage, perPage, apiSort, apiDirection])
 
   const setCurrentPage = (page: number) => {
     setSearchParams(
@@ -130,34 +141,34 @@ function useReposPaginated(
     )
   }
 
-  const setSort = (option: SortOption, direction: SortDirection) => {
+  const setSort = (column: SortColumn, dir: SortDirection) => {
     setSearchParams(
       (prev) => {
         const next = new URLSearchParams(prev)
-        next.set('sort', option)
-        next.set('direction', direction)
-        next.set('page', '1')
+        next.set('sort', column)
+        next.set('direction', dir)
+        if (column === 'full_name') next.set('page', '1')
         return next
       },
       { replace: true }
     )
   }
 
-  const totalRepos = userInfo?.public_repos ?? 0
+  const totalRepos = user?.public_repos ?? 0
   const totalPages = Math.max(1, Math.ceil(totalRepos / perPage))
 
   return {
-    userInfo,
+    user,
     repos,
     currentPage,
     perPage,
-    sortOption,
-    sortDirection,
+    sort,
+    direction,
     totalRepos,
     totalPages,
     loading,
     error,
-    rateLimited,
+    rateLimitMessage,
     setCurrentPage,
     setPerPage,
     setSort

@@ -1,13 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import type { UserInfo, RepoInfo } from '@api/github'
-import { getUserInfo, getUserReposPage } from '@api/github'
+import type { User, Repo } from '@api/github'
+import { getUser, getUserRepos } from '@api/github'
 import UserPage from '@pages/UserPage'
 
 vi.mock('@api/github', () => ({
-  getUserInfo: vi.fn(),
-  getUserReposPage: vi.fn(),
+  getUser: vi.fn(),
+  getUserRepos: vi.fn(),
   isRateLimitError: vi.fn()
 }))
 
@@ -15,9 +15,9 @@ vi.mock('@components/Loading', () => ({
   default: () => <div data-testid="loading" />
 }))
 
-vi.mock('@components/UserCard', () => ({
-  default: ({ user }: { user: UserInfo }) => (
-    <div data-testid="user-card">{user.login}</div>
+vi.mock('@components/UserInfo', () => ({
+  default: ({ user }: { user: User }) => (
+    <div data-testid="user-info">{user.login}</div>
   )
 }))
 
@@ -27,7 +27,7 @@ vi.mock('@components/RepoList', () => ({
   )
 }))
 
-const mockUser: UserInfo = {
+const mockUser: User = {
   login: 'testuser',
   id: 1,
   avatar_url: 'https://avatar.test',
@@ -45,7 +45,7 @@ const mockUser: UserInfo = {
   email: null
 }
 
-const mockRepos: RepoInfo[] = [
+const mockRepos: Repo[] = [
   {
     id: 1,
     name: 'test-repo',
@@ -96,28 +96,28 @@ describe('UserPage', () => {
   })
 
   it('shows loading while fetching', () => {
-    vi.mocked(getUserInfo).mockReturnValue(new Promise(() => {}))
-    vi.mocked(getUserReposPage).mockReturnValue(new Promise(() => {}))
+    vi.mocked(getUser).mockReturnValue(new Promise(() => {}))
+    vi.mocked(getUserRepos).mockReturnValue(new Promise(() => {}))
 
     renderWithUsername('testuser')
     expect(screen.getByTestId('loading')).toBeInTheDocument()
   })
 
-  it('shows user card and repo list on success', async () => {
-    vi.mocked(getUserInfo).mockResolvedValue({ data: mockUser } as never)
-    vi.mocked(getUserReposPage).mockResolvedValue({ data: mockRepos } as never)
+  it('shows user info and repo list on success', async () => {
+    vi.mocked(getUser).mockResolvedValue({ data: mockUser } as never)
+    vi.mocked(getUserRepos).mockResolvedValue({ data: mockRepos } as never)
 
     renderWithUsername('testuser')
 
     await waitFor(() =>
-      expect(screen.getByTestId('user-card')).toBeInTheDocument()
+      expect(screen.getByTestId('user-info')).toBeInTheDocument()
     )
     expect(screen.getByTestId('repo-list')).toBeInTheDocument()
   })
 
   it('shows error page on fetch failure', async () => {
-    vi.mocked(getUserInfo).mockRejectedValue(new Error('API error'))
-    vi.mocked(getUserReposPage).mockRejectedValue(new Error('API error'))
+    vi.mocked(getUser).mockRejectedValue(new Error('API error'))
+    vi.mocked(getUserRepos).mockRejectedValue(new Error('API error'))
 
     renderWithUsername('testuser')
 

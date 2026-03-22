@@ -13,21 +13,19 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   return (
-    <div style={{ height: '100vh', overflow: 'hidden' }}>
-      <AuthProvider>
-        <LoginModalProvider>
-          <LoginModal />
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<HomePage />} />
-              <Route path="user/:username" element={<UserPage />} />
-              <Route path="repo/:username/:reponame" element={<RepoPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Routes>
-        </LoginModalProvider>
-      </AuthProvider>
-    </div>
+    <AuthProvider>
+      <LoginModalProvider>
+        <LoginModal />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="user/:username" element={<UserPage />} />
+            <Route path="repo/:username/:reponame" element={<RepoPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </LoginModalProvider>
+    </AuthProvider>
   )
 }
 

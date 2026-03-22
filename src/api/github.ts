@@ -16,7 +16,7 @@ ghClient.interceptors.request.use((config) => {
   return config
 })
 
-export interface UserInfo {
+export interface User {
   login: string
   id: number
   avatar_url: string
@@ -34,56 +34,81 @@ export interface UserInfo {
   email: string | null
 }
 
-export interface RepoInfo {
+export interface Repo {
   id: number
   name: string
   full_name: string
   html_url: string
   description: string | null
-  stargazers_count: number
+  homepage: string | null
+  fork: boolean
+  archived: boolean
+  disabled: boolean
+  visibility: string
+  default_branch: string
+  topics: string[]
   language: string | null
+  license: { key: string; name: string; spdx_id: string } | null
+  has_issues: boolean
+  has_discussions: boolean
+  stargazers_count: number
   forks_count: number
   open_issues_count: number
+  watchers_count: number
+  subscribers_count: number
+  network_count: number
+  size: number
   created_at: string
   updated_at: string
   pushed_at: string
-  size: number
-  watchers_count: number
+  owner: {
+    login: string
+    avatar_url: string
+    html_url: string
+    type: string
+  }
 }
 
-export type SortOption = 'created' | 'updated' | 'pushed' | 'full_name'
 export type SortDirection = 'asc' | 'desc'
 
-function getAuthenticatedUser() {
-  return ghClient.get<UserInfo>('/user')
+function getAuthUser() {
+  return ghClient.get<User>('/user')
 }
 
-function getUserInfo(username: string) {
-  return ghClient.get<UserInfo>(`/users/${username}`)
+function getUser(username: string) {
+  return ghClient.get<User>(`/users/${username}`)
 }
 
-function getUserReposPage(
+function getUserRepos(
   username: string,
   page: number,
-  sort: SortOption = 'updated',
-  direction: SortDirection = 'desc',
-  perPage: number = 30
+  perPage: number = 30,
+  sort?: string,
+  direction?: SortDirection
 ) {
-  return ghClient.get<RepoInfo[]>(
-    `/users/${username}/repos?per_page=${perPage}&page=${page}&sort=${sort}&direction=${direction}`
-  )
+  const params = new URLSearchParams({
+    per_page: perPage.toString(),
+    page: page.toString()
+  })
+  if (sort) params.set('sort', sort)
+  if (direction) params.set('direction', direction)
+  return ghClient.get<Repo[]>(`/users/${username}/repos?${params}`)
 }
 
-function getRepoInfo(username: string, reponame: string) {
-  return ghClient.get<RepoInfo>(`/repos/${username}/${reponame}`)
+function getRepo(username: string, reponame: string) {
+  return ghClient.get<Repo>(`/repos/${username}/${reponame}`)
+}
+
+export function getRateLimitMessage(err: unknown): string | null {
+  if (axios.isAxiosError(err) && err.response?.status === 403) {
+    const message: string = err.response.data?.message ?? ''
+    if (message.toLowerCase().includes('rate limit')) return message
+  }
+  return null
 }
 
 export function isRateLimitError(err: unknown): boolean {
-  if (axios.isAxiosError(err) && err.response?.status === 403) {
-    const message: string = err.response.data?.message ?? ''
-    return message.toLowerCase().includes('rate limit')
-  }
-  return false
+  return getRateLimitMessage(err) !== null
 }
 
-export { getAuthenticatedUser, getUserInfo, getUserReposPage, getRepoInfo }
+export { getAuthUser, getUser, getUserRepos, getRepo }

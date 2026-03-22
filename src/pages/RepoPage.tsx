@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router'
+import { useParams } from 'react-router'
 import { useRepoData } from '@hooks/useRepoData'
 import Loading from '@components/Loading'
 import ErrorPage from '@pages/ErrorPage'
@@ -8,24 +8,14 @@ function RepoPage() {
   const { username, reponame } = useParams()
   const { repo, loading, error, rateLimited } = useRepoData(username, reponame)
 
-  return (
-    <div className="container-fluid px-0 py-4">
-      <div className="mb-4">
-        <Link to={`/user/${username}`} className="btn btn-outline-secondary">
-          <i className="bi bi-arrow-left me-2"></i>
-          Voltar para {username}
-        </Link>
-      </div>
+  if (loading) return <Loading />
 
-      {loading ? (
-        <Loading />
-      ) : rateLimited || error || !repo ? (
-        <ErrorPage message="Repositório não encontrado ou erro na requisição." />
-      ) : (
-        <RepoDetails repo={repo} />
-      )}
-    </div>
-  )
+  if (rateLimited || error || !repo)
+    return (
+      <ErrorPage message="Repositório não encontrado ou erro na requisição." />
+    )
+
+  return <RepoDetails repo={repo} />
 }
 
 export default RepoPage

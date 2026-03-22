@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { getRepoInfo, isRateLimitError, type RepoInfo } from '@api/github'
+import { getRepo, isRateLimitError, type Repo } from '@api/github'
 
 interface UseRepoDataReturn {
-  repo: RepoInfo | null
+  repo: Repo | null
   loading: boolean
   error: boolean
   rateLimited: boolean
@@ -12,7 +12,7 @@ function useRepoData(
   username: string | undefined,
   reponame: string | undefined
 ): UseRepoDataReturn {
-  const [repo, setRepo] = useState<RepoInfo | null>(null)
+  const [repo, setRepo] = useState<Repo | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [rateLimited, setRateLimited] = useState(false)
@@ -23,7 +23,7 @@ function useRepoData(
       setLoading(true)
       setRateLimited(false)
       try {
-        const response = await getRepoInfo(username, reponame)
+        const response = await getRepo(username, reponame)
         setRepo(response.data)
         setError(false)
       } catch (err) {

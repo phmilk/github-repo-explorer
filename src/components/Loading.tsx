@@ -1,9 +1,12 @@
 function Loading() {
   return (
-    <div className="d-flex justify-content-center py-5">
-      <div className="spinner-border text-primary" role="status">
-        <span className="visually-hidden">Carregando...</span>
-      </div>
+    <div
+      role="status"
+      aria-live="polite"
+      className="d-flex flex-column align-items-center justify-content-center gap-3 py-5 text-muted"
+    >
+      <div className="spinner-border" aria-hidden="true" />
+      <span>Carregando...</span>
     </div>
   )
 }

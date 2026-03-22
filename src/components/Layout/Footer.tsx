@@ -1,18 +1,26 @@
 function Footer() {
   return (
-    <footer className="bg-dark text-white text-center py-3 mt-auto">
-      <p className="mb-0">
+    <footer className="border-top mt-auto py-3 text-center text-muted">
+      <small>
         &copy; 2026{' '}
         <a
           href="https://github.com/phmilk"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white"
+          className="text-muted"
         >
           phmilk
         </a>{' '}
-        &mdash; GitHub Repo Explorer
-      </p>
+        &mdash;{' '}
+        <a
+          href="https://github.com/phmilk/github-repo-explorer"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted"
+        >
+          GitHub Repo Explorer
+        </a>
+      </small>
     </footer>
   )
 }

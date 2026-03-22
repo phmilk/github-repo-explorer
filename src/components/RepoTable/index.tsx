@@ -1,65 +1,24 @@
-import type { RepoInfo, SortOption, SortDirection } from '@api/github'
-import Toolbar from './Toolbar'
+import Table from 'react-bootstrap/Table'
+import type { Repo, SortDirection } from '@api/github'
 import Body from './Body'
 import Footer from './Footer'
+import SortHeader from './SortHeader'
+
+export type { SortColumn } from './SortHeader'
+import type { SortColumn } from './SortHeader'
 
 interface RepoTableProps {
-  repos: RepoInfo[]
+  repos: Repo[]
   totalRepos: number
   currentPage: number
   totalPages: number
   perPage: number
-  sortOption: SortOption
+  sortColumn: SortColumn
   sortDirection: SortDirection
   loading: boolean
   onPageChange: (page: number) => void
   onPerPageChange: (perPage: number) => void
-  onSortChange: (option: SortOption, direction: SortDirection) => void
-}
-
-interface SortHeaderProps {
-  label: string
-  column: SortOption
-  currentSort: SortOption
-  currentDirection: SortDirection
-  onSortChange: (option: SortOption, direction: SortDirection) => void
-  className?: string
-}
-
-function SortHeader({
-  label,
-  column,
-  currentSort,
-  currentDirection,
-  onSortChange,
-  className = ''
-}: SortHeaderProps) {
-  const isActive = currentSort === column
-
-  function handleClick() {
-    if (isActive) {
-      onSortChange(column, currentDirection === 'desc' ? 'asc' : 'desc')
-    } else {
-      onSortChange(column, 'desc')
-    }
-  }
-
-  return (
-    <th
-      onClick={handleClick}
-      style={{ cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap' }}
-      className={className}
-    >
-      {label}
-      {isActive ? (
-        <i
-          className={`bi bi-chevron-${currentDirection === 'desc' ? 'down' : 'up'} ms-1`}
-        />
-      ) : (
-        <i className="bi bi-chevron-down ms-1 opacity-25" />
-      )}
-    </th>
-  )
+  onSortChange: (column: SortColumn, direction: SortDirection) => void
 }
 
 function RepoTable({
@@ -68,7 +27,7 @@ function RepoTable({
   currentPage,
   totalPages,
   perPage,
-  sortOption,
+  sortColumn,
   sortDirection,
   loading,
   onPageChange,
@@ -76,78 +35,61 @@ function RepoTable({
   onSortChange
 }: RepoTableProps) {
   return (
-    <div className="d-flex flex-column h-100 bg-white">
-      <Toolbar
-        totalRepos={totalRepos}
-        perPage={perPage}
-        onPerPageChange={onPerPageChange}
-      />
-
-      <div className="flex-grow-1 overflow-y-auto w-100">
-        <table
-          className="table table-hover table-sm m-0 w-100"
-          style={{ tableLayout: 'fixed' }}
-        >
-          <colgroup>
-            <col style={{ width: '34%' }} />
-            <col style={{ width: '11%' }} />
-            <col style={{ width: '11%' }} />
-            <col style={{ width: '11%' }} />
-            <col style={{ width: '11%' }} />
-            <col style={{ width: '11%' }} />
-            <col style={{ width: '11%' }} />
-          </colgroup>
-          <thead className="table-light sticky-top">
-            <tr>
-              <SortHeader
-                label="Nome"
-                column="full_name"
-                currentSort={sortOption}
-                currentDirection={sortDirection}
-                onSortChange={onSortChange}
-              />
-              <th className="text-center">Stars</th>
-              <th className="text-center">Forks</th>
-              <th className="text-center">Issues</th>
-              <SortHeader
-                label="Criado"
-                column="created"
-                currentSort={sortOption}
-                currentDirection={sortDirection}
-                onSortChange={onSortChange}
-                className="text-center"
-              />
-              <SortHeader
-                label="Pushed"
-                column="pushed"
-                currentSort={sortOption}
-                currentDirection={sortDirection}
-                onSortChange={onSortChange}
-                className="text-center"
-              />
-              <SortHeader
-                label="Atualizado"
-                column="updated"
-                currentSort={sortOption}
-                currentDirection={sortDirection}
-                onSortChange={onSortChange}
-                className="text-center"
-              />
-            </tr>
-          </thead>
-          <Body repos={repos} />
-        </table>
-      </div>
+    <section aria-label="Repositórios">
+      <Table
+        hover
+        responsive
+        size="sm"
+        className="mb-0"
+        aria-label={`Lista de repositórios (${totalRepos} total)`}
+      >
+        <thead>
+          <tr>
+            <SortHeader
+              label="Nome"
+              column="full_name"
+              currentSort={sortColumn}
+              currentDirection={sortDirection}
+              defaultDirection="asc"
+              onSortChange={onSortChange}
+            />
+            <SortHeader
+              label="Stars"
+              column="stargazers_count"
+              currentSort={sortColumn}
+              currentDirection={sortDirection}
+              onSortChange={onSortChange}
+            />
+            <SortHeader
+              label="Forks"
+              column="forks_count"
+              currentSort={sortColumn}
+              currentDirection={sortDirection}
+              onSortChange={onSortChange}
+            />
+            <SortHeader
+              label="Issues"
+              column="open_issues_count"
+              currentSort={sortColumn}
+              currentDirection={sortDirection}
+              onSortChange={onSortChange}
+            />
+          </tr>
+        </thead>
+        <Body repos={repos} />
+      </Table>
 
       <Footer
         currentPage={currentPage}
         totalPages={totalPages}
         totalRepos={totalRepos}
         reposOnPage={repos.length}
+        perPage={perPage}
         loading={loading}
         onPageChange={onPageChange}
+        onPerPageChange={onPerPageChange}
       />
-    </div>
+    </section>
   )
 }
 

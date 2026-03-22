@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Button from 'react-bootstrap/Button'
 
 function Search() {
   const navigate = useNavigate()
@@ -7,9 +10,10 @@ function Search() {
   const [username, setUsername] = useState(usernameParam ?? '')
 
   return (
-    <form
-      className="w-100"
+    <Form
       role="search"
+      className="d-flex flex-grow-1"
+      style={{ maxWidth: '480px' }}
       onSubmit={(e) => {
         e.preventDefault()
         if (!username.trim()) {
@@ -19,20 +23,23 @@ function Search() {
         navigate(`/user/${username.trim()}`)
       }}
     >
-      <div className="input-group">
-        <span className="input-group-text">
-          <i className="bi bi-search" />
-        </span>
-        <input
+      <Form.Label htmlFor="search-username" className="visually-hidden">
+        Usuário do GitHub
+      </Form.Label>
+      <InputGroup className="w-100">
+        <Form.Control
+          id="search-username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           name="user_name"
-          className="form-control"
-          placeholder="Username"
-          aria-label="Username"
+          placeholder="Buscar usuário..."
+          autoComplete="on"
         />
-      </div>
-    </form>
+        <Button type="submit" variant="outline-light" aria-label="Buscar">
+          <i className="bi bi-search" aria-hidden="true" />
+        </Button>
+      </InputGroup>
+    </Form>
   )
 }
 

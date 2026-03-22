@@ -1,6 +1,7 @@
+import { useMemo } from 'react'
 import { useParams } from 'react-router'
 import { useReposPaginated } from '@hooks/useReposPaginated'
-import UserCard from '@components/UserCard'
+import UserInfo from '@components/UserInfo'
 import RepoTable from '@components/RepoTable'
 import Loading from '@components/Loading'
 import ErrorPage from '@pages/ErrorPage'
@@ -8,65 +9,61 @@ import ErrorPage from '@pages/ErrorPage'
 function UserPage() {
   const { username } = useParams()
   const {
-    userInfo,
+    user,
     repos,
     currentPage,
     perPage,
-    sortOption,
-    sortDirection,
+    sort,
+    direction,
     totalRepos,
     totalPages,
     loading,
     error,
-    rateLimited,
+    rateLimitMessage,
     setCurrentPage,
     setPerPage,
     setSort
   } = useReposPaginated(username)
 
-  const tableProps = {
-    repos,
-    totalRepos,
-    currentPage,
-    totalPages,
-    perPage,
-    sortOption,
-    sortDirection,
-    loading,
-    onPageChange: setCurrentPage,
-    onPerPageChange: setPerPage,
-    onSortChange: setSort
-  }
+  const sortedRepos = useMemo(() => {
+    if (sort === 'full_name') return repos
+
+    const arr = [...repos]
+    arr.sort((a, b) => {
+      const [aVal, bVal] = [a[sort], b[sort]]
+      return direction === 'desc' ? bVal - aVal : aVal - bVal
+    })
+    return arr
+  }, [repos, sort, direction])
+
+  if (loading) return <Loading />
+
+  if (error || !user)
+    return (
+      <ErrorPage
+        message={
+          rateLimitMessage ?? 'Usuário não encontrado ou erro na requisição.'
+        }
+      />
+    )
 
   return (
-    <div
-      className="d-flex flex-column overflow-hidden"
-      style={{ height: 'calc(100vh - 5.5rem)' }}
-    >
-      {loading && !userInfo ? (
-        <Loading />
-      ) : userInfo ? (
-        <>
-          <div
-            className="d-none d-lg-grid gap-3 p-3 bg-light overflow-hidden h-100"
-            style={{ gridTemplateColumns: '280px 1fr' }}
-          >
-            <aside className="overflow-y-auto overflow-x-hidden h-100">
-              <UserCard user={userInfo} />
-            </aside>
-            <main className="d-flex flex-column overflow-hidden">
-              <RepoTable {...tableProps} />
-            </main>
-          </div>
-          <div className="d-lg-none d-flex flex-column gap-3 p-3 h-100 overflow-hidden">
-            <UserCard user={userInfo} />
-            <RepoTable {...tableProps} />
-          </div>
-        </>
-      ) : rateLimited || error ? (
-        <ErrorPage message="Usuário não encontrado ou erro na requisição." />
-      ) : null}
-    </div>
+    <>
+      <UserInfo user={user} />
+      <RepoTable
+        repos={sortedRepos}
+        totalRepos={totalRepos}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        perPage={perPage}
+        sortColumn={sort}
+        sortDirection={direction}
+        loading={loading}
+        onPageChange={setCurrentPage}
+        onPerPageChange={setPerPage}
+        onSortChange={setSort}
+      />
+    </>
   )
 }
 

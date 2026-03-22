@@ -1,29 +1,27 @@
-import type { RepoInfo } from '@api/github'
-import { formatStars, formatDate } from './utils'
+import { Link, useParams } from 'react-router'
+import type { Repo } from '@api/github'
+import { formatStars } from './utils'
 
 interface RowProps {
-  repo: RepoInfo
+  repo: Repo
 }
 
 function Row({ repo }: RowProps) {
+  const { username } = useParams()
+
   return (
-    <tr>
+    <tr className="position-relative">
       <td>
-        <a
-          href={repo.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-decoration-none d-block text-truncate"
+        <Link
+          to={`/repo/${username}/${repo.name}`}
+          className="stretched-link text-reset text-decoration-none"
         >
-          <strong>{repo.name}</strong>
-        </a>
+          {repo.name}
+        </Link>
       </td>
-      <td className="text-center small">{formatStars(repo.stargazers_count)}</td>
-      <td className="text-center small">{formatStars(repo.forks_count)}</td>
-      <td className="text-center small">{repo.open_issues_count}</td>
-      <td className="text-center small">{formatDate(repo.created_at)}</td>
-      <td className="text-center small">{formatDate(repo.pushed_at)}</td>
-      <td className="text-center small">{formatDate(repo.updated_at)}</td>
+      <td>{formatStars(repo.stargazers_count)}</td>
+      <td>{formatStars(repo.forks_count)}</td>
+      <td>{repo.open_issues_count}</td>
     </tr>
   )
 }
