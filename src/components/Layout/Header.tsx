@@ -1,13 +1,23 @@
-import Search from '../Serach'
+import { Link } from 'react-router'
+import Search from '../Search'
+import UserMenu from './UserMenu'
 
 function Header() {
   return (
-    <header className="navbar bd-navbar sticky-top bg-dark text-white display-flex justify-content-between p-3">
-      <div>
-        <i className="bi bi-github" style={{ fontSize: '24px' }}></i>
-        <span className="ms-2 h5 mb-0">GitHub Explorer</span>
+    <header className="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+      <div className="container-fluid">
+        <Link to="/" className="navbar-brand d-flex align-items-center">
+          <i className="bi bi-github me-2" style={{ fontSize: '24px' }}></i>
+          <span className="h5 mb-0">GitHub Repo Explorer</span>
+        </Link>
+        <div
+          className="d-flex w-100 mt-2 mt-lg-0 gap-3 align-items-center"
+          style={{ maxWidth: '400px' }}
+        >
+          <Search />
+          <UserMenu />
+        </div>
       </div>
-      <Search />
     </header>
   )
 }

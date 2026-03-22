@@ -1,8 +1,7 @@
-interface EmailProps {
-  email: string | null
-}
+import { useUserCard } from '@hooks/useUserCard'
 
-function Email({ email }: EmailProps) {
+function Email() {
+  const { email } = useUserCard()
   return (
     <div className="d-flex align-items-center justify-content-center gap-2 mb-4 text-secondary small">
       <i className="bi bi-envelope" style={{ fontSize: '16px' }}></i>

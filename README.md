@@ -3,9 +3,9 @@
 - [] Testes com React Testing Library
 - [x] Formatação/padronização de código com eslint e pretter
 - [x] Requests com Axios
-- [x] Layout Responsivo com Bootstrap
+- [] Layout Responsivo com Bootstrap
 - [x] Input de busca de usuário
-- [] Detalhes do usuário
+- [x] Detalhes do usuário
   - [x] número de seguidores
   - [x] número de seguidos
   - [x] imagem do avatar
@@ -20,5 +20,5 @@
   - [] Número de estrelas
   - [] Linguagem
   - [] Link externo para a página do repositório no GitHub
-- [] CI/CD com GitHubActions
-- [] Hospedagem no firebase hosting
+- [x] CI/CD com GitHubActions
+- [x] Hospedagem no firebase hosting

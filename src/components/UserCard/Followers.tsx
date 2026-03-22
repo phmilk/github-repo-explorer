@@ -1,8 +1,7 @@
-interface FollowersProps {
-  followers: number
-}
+import { useUserCard } from '@hooks/useUserCard'
 
-function Followers({ followers }: FollowersProps) {
+function Followers() {
+  const { followers } = useUserCard()
   return (
     <div className="text-center">
       <div className="d-flex align-items-center justify-content-center gap-1 mb-1">

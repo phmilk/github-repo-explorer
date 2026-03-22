@@ -1,8 +1,7 @@
-interface BioProps {
-  bio: string | null
-}
+import { useUserCard } from '@hooks/useUserCard'
 
-function Bio({ bio }: BioProps) {
+function Bio() {
+  const { bio } = useUserCard()
   return (
     <p className="card-text small mb-4" style={{ minHeight: '40px' }}>
       {bio ? (

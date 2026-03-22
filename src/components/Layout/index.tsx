@@ -4,13 +4,13 @@ import Footer from './Footer'
 
 function Layout() {
   return (
-    <>
+    <div className="d-flex flex-column min-vh-100">
       <Header />
-      <main className='min-vh-100 d-flex flex-column align-items-center justify-content-center bg-light p-4"'>
+      <main className="flex-grow-1 d-flex flex-column align-items-center bg-light">
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   )
 }
 

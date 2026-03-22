@@ -1,26 +1,33 @@
 import { Route, Routes } from 'react-router'
-import Layout from './components/Layout'
-import HomePage from './pages/HomePage'
-import UserPage from './pages/UserPage'
-import RepositoryPage from './pages/RepositoryPage'
-import NotFoundPage from './pages/NotFoundPage'
+import { AuthProvider } from '@contexts/AuthContext'
+import { LoginModalProvider } from '@contexts/LoginModalContext'
+import Layout from '@components/Layout'
+import LoginModal from '@components/LoginModal'
+import HomePage from '@pages/HomePage'
+import UserPage from '@pages/UserPage'
+import RepoPage from '@pages/RepoPage'
+import NotFoundPage from '@pages/NotFoundPage'
 
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import './App.scss'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="user/:username" element={<UserPage />} />
-        <Route
-          path="user/:username/repo/:reponame"
-          element={<RepositoryPage />}
-        />
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
-    </Routes>
+    <div style={{ height: '100vh', overflow: 'hidden' }}>
+      <AuthProvider>
+        <LoginModalProvider>
+          <LoginModal />
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="user/:username" element={<UserPage />} />
+              <Route path="repo/:username/:reponame" element={<RepoPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </LoginModalProvider>
+      </AuthProvider>
+    </div>
   )
 }
 

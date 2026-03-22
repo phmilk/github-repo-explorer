@@ -1,9 +1,8 @@
-interface NameProps {
-  login: string
-}
+import { useUserCard } from '@hooks/useUserCard'
 
-function UserName({ login }: NameProps) {
-  return <h6 className="card-subtitle text-secondary mb-3">@{login}</h6>
+function UserName() {
+  const { login } = useUserCard()
+  return <p className="text-muted mb-3">@{login}</p>
 }
 
 export default UserName

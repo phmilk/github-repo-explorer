@@ -1,20 +1,14 @@
-interface ImageProps {
-  avatar_url: string
-  login: string
-}
+import { useUserCard } from '@hooks/useUserCard'
 
-function Avatar({ avatar_url, login }: ImageProps) {
+function Avatar() {
+  const { avatar_url, name, login } = useUserCard()
   return (
-    <div className="position-relative d-inline-block mb-3">
-      <img
-        src={avatar_url}
-        alt={`Avatar de ${login}`}
-        width={120}
-        height={120}
-        className="rounded-circle border border-4 border-light shadow-sm"
-        referrerPolicy="no-referrer"
-      />
-    </div>
+    <img
+      src={avatar_url}
+      alt={name || login}
+      className="rounded-circle mb-3 border border-3 border-white shadow-sm"
+      style={{ width: '120px', height: '120px', objectFit: 'cover' }}
+    />
   )
 }
 

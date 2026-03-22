@@ -1,19 +1,16 @@
-interface UserInfo {
-  url: string
-}
+import { useUserCard } from '@hooks/useUserCard'
 
-function ProfileButton({ url }: UserInfo) {
+function ProfileButton() {
+  const { html_url } = useUserCard()
   return (
-    <div className="mt-4">
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn btn-dark w-100"
-      >
-        Ver Perfil no GitHub
-      </a>
-    </div>
+    <a
+      href={html_url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="btn btn-primary w-100 mt-4 rounded-pill fw-bold"
+    >
+      Ver Perfil no GitHub
+    </a>
   )
 }
 
