@@ -1,5 +1,9 @@
 import Table from 'react-bootstrap/Table'
-import type { Repo, SortDirection, SortColumn } from '@features/repositories/types'
+import type {
+  Repo,
+  SortDirection,
+  SortColumn
+} from '@features/repositories/types'
 import Body from './Body'
 import Footer from './Footer'
 import SortHeader from './SortHeader'

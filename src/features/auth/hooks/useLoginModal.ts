@@ -3,7 +3,8 @@ import { useContext } from 'react'
 
 function useLoginModal() {
   const ctx = useContext(LoginModalContext)
-  if (!ctx) throw new Error('useLoginModal must be used within LoginModalProvider')
+  if (!ctx)
+    throw new Error('useLoginModal must be used within LoginModalProvider')
   return ctx
 }
 

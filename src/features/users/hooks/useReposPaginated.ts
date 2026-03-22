@@ -3,7 +3,11 @@ import { useSearchParams } from 'react-router'
 import { getUser } from '@features/users/services/userApi'
 import { getUserRepos } from '@features/repositories/services/repoApi'
 import type { User } from '@features/users/types'
-import type { Repo, SortDirection, SortColumn } from '@features/repositories/types'
+import type {
+  Repo,
+  SortDirection,
+  SortColumn
+} from '@features/repositories/types'
 
 const VALID_PER_PAGES = [10, 20, 30, 50, 100]
 const VALID_SORT_COLUMNS: SortColumn[] = [
