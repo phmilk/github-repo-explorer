@@ -1,3 +1,5 @@
+const version = __APP_VERSION__
+
 function Footer() {
   return (
     <footer className="border-top mt-auto py-3 text-center text-muted">
@@ -19,7 +21,8 @@ function Footer() {
           className="text-muted"
         >
           GitHub Repo Explorer
-        </a>
+        </a>{' '}
+        v{version}
       </small>
     </footer>
   )
