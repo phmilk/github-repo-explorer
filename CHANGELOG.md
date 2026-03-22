@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/phmilk/github-repo-explorer/compare/v1.0.0...v1.1.0) (2026-03-22)
+
+
+### Bug Fixes
+
+* hardcode Firebase config to fix blank page on production ([2e8eed8](https://github.com/phmilk/github-repo-explorer/commit/2e8eed89d65c1b24e599ab8ec44aa44a18cfc2a8))
+
+
+### Features
+
+* show app version in footer ([71359a7](https://github.com/phmilk/github-repo-explorer/commit/71359a76031676e9866e96f2f88988616d8ab056))
+
 # 1.0.0 (2026-03-22)
 
 ### Features
