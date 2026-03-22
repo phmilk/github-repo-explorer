@@ -19,12 +19,14 @@
     /* Path aliases */
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["src/api/*"],
-      "@components/*": ["src/components/*"],
-      "@pages/*": ["src/pages/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@lib/*": ["src/lib/*"],
-      "@contexts/*": ["src/contexts/*"]
+      "@app/*": ["src/app/*"],
+      "@shared/*": ["src/shared/*"],
+      "@features/auth": ["src/features/auth/index.ts"],
+      "@features/auth/*": ["src/features/auth/*"],
+      "@features/users": ["src/features/users/index.ts"],
+      "@features/users/*": ["src/features/users/*"],
+      "@features/repositories": ["src/features/repositories/index.ts"],
+      "@features/repositories/*": ["src/features/repositories/*"]
     },
 
     /* Linting */

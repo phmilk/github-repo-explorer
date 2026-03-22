@@ -4,7 +4,20 @@
       "Bash(npx vitest:*)",
       "Bash(npm install:*)",
       "Bash(npm test:*)",
-      "Bash(grep -E '\\\\.\\(ts|tsx\\)$')"
+      "Bash(grep -E '\\\\.\\(ts|tsx\\)$')",
+      "Bash(npm run:*)",
+      "Bash(grep -v \"^$\")",
+      "Bash(node -e \"const p=require\\(''./package.json''\\); console.log\\(JSON.stringify\\(p.devDependencies[''@vitest/coverage-v8'']\\)\\)\")",
+      "Bash(grep -E \"All files|^$\")",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/night/.hack/github-repo-explorer/**)",
+      "Bash(done)",
+      "Bash(cp src/__tests__/features/auth/services/tokenStorage.test.ts src/features/auth/services/tokenStorage.test.ts)",
+      "Bash(cp src/__tests__/features/repositories/components/RepoDetails/Flag.test.tsx src/features/repositories/components/RepoDetails/Flag.test.tsx)",
+      "Bash(cp src/__tests__/features/repositories/components/RepoDetails/Header.test.tsx src/features/repositories/components/RepoDetails/Header.test.tsx)",
+      "Bash(cp src/__tests__/features/repositories/components/RepoDetails/InfoRow.test.tsx src/features/repositories/components/RepoDetails/InfoRow.test.tsx)",
+      "Bash(cp src/__tests__/features/repositories/components/RepoTable/Body.test.tsx src/features/repositories/components/RepoTable/Body.test.tsx)"
     ]
   }
 }
