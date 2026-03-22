@@ -3,13 +3,13 @@ import { getAuth, GithubAuthProvider } from 'firebase/auth'
 import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: 'AIzaSyBePpyEgtREZLmA33-rB8QCW4JDTKB0XQk',
+  authDomain: 'my-github-repo-explorer.firebaseapp.com',
+  projectId: 'my-github-repo-explorer',
+  storageBucket: 'my-github-repo-explorer.firebasestorage.app',
+  messagingSenderId: '137081066056',
+  appId: '1:137081066056:web:ca7faf89dc273c64fb3e7d',
+  measurementId: 'G-V6G2HL2H74'
 }
 
 const app = initializeApp(firebaseConfig)
